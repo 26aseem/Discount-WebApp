@@ -9,6 +9,12 @@ const cors = require('cors');
 
 const adminauthRoutes = require('./routes/adminauth')
 const merchantauthRoutes = require('./routes/merchantauth')
+const adminRoutes = require('./routes/admin')
+const merchantRoutes = require('./routes/merchant')
+const categoryRoutes = require('./routes/category')
+const offerRoutes = require('./routes/offer')
+
+
 
 const mongoose = require('mongoose');
 
@@ -32,6 +38,10 @@ app.use(cors());
 ///api is added before all 
 app.use("/api",adminauthRoutes);
 app.use("/api",merchantauthRoutes);
+app.use("/api",adminRoutes);
+app.use("/api",merchantRoutes);
+app.use("/api",categoryRoutes);
+app.use("/api",offerRoutes);
 
 //Port for listening
 const port = process.env.PORT || 8000;

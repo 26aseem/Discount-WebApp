@@ -5,10 +5,46 @@ var expressJwt = require('express-jwt');
 
 //merchantsignup is created
 exports.merchantsignup = (req, res) => {
-    /*res.json({
-        message:"Signup works!"
-    })*/
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
 
+    form.parse(req, (err, fields, file) => {
+        if(err){
+            return res.status(400).json({
+                error: "Issues with the image"
+            });
+        }
+
+        let merchant = req.merchant;
+        merchant = _.extend
+
+        //handle file here
+        if(file.merchantPhoto){
+            if(file.merchantPhoto.size > 3*1024*1024){
+                return res.status(400).json({
+                    error: "File size greater than 3 MB"
+                });
+            }
+            merchant.merchantPhoto.data = fs.readFileSync(file.merchantPhoto.path)
+            merchant.merchantPhoto.contentType = file.merchantPhoto.type
+        }
+
+        //save to the db
+        merchant.save((err, merchant) => {
+            if(err){
+                res.status(400).json({
+                    error: "Saving image to the Database failed"
+                });
+            }
+            return res.json(merchant);
+        });
+
+    })
+};
+
+
+/*exports.merchantsignup = (req, res) => {
+    
     const errors = validationResult(req)
     if(!errors.isEmpty()){
         return res.status(422).json({
@@ -32,7 +68,8 @@ exports.merchantsignup = (req, res) => {
             merchantName: merchant.marchantName
         })
     });
-};
+};*/
+
 
 //merchant signin is created
 exports.merchantsignin = (req, res) => {
@@ -76,4 +113,22 @@ exports.merchantsignout = (req,res) => {
     res.json({
         message: "Merchant Signout"
     });
+};
+
+
+//protected routes
+exports.isSignedIn = expressJwt({
+    secret: process.env.SECRET,
+    userProperty: "auth"
+});
+
+//custom middlewares
+exports.isAuthenticated = ( req, res, next) => {
+    let checker = req.profile && req.auth && req.profile._id == req.auth._id;
+    if(!checker){
+        return res.status(403).json({
+            error: "ACCESS DENIED"
+        });
+    }
+    next();
 };

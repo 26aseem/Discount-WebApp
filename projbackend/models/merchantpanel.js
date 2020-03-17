@@ -1,9 +1,9 @@
-//Schema for Admin Panel
+//Schema for Merchant Panel
 //Mongoose, Crypto and uuid version 1 are used
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const uuidv1 = require('uuid/v1');
-const {OrderId} = mongoose.Schema.Types.ObjectId;
+const {OrderId} = mongoose.Schema;
 
 var merchantpanelSchema = new mongoose.Schema({
     merchant: {
