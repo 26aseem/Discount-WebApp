@@ -24,6 +24,11 @@ const offerSchema = new mongoose.Schema({
     photo: {
         data: Buffer,
         contentType: String
+    },
+
+    merchant: {
+        type: ObjectId,
+        ref: "Merchant"
     }
 },
 
@@ -32,6 +37,8 @@ const offerSchema = new mongoose.Schema({
 
 });
 
+module.exports = mongoose.model("Offer",offerSchema);
+/*
 const Offer = mongoose.model("Offer",offerSchema);
 
 
@@ -41,10 +48,11 @@ const allOfferSchema = new mongoose.Schema({
         type: ObjectId,
         ref: "Merchant"
     },
-    offers: [Offer]
+    offers: [offerSchema]
 
 });
 
 const AllOffers = mongoose.model("AllOffers",allOfferSchema);
 
 module.exports = {AllOffers,Offer};
+*/

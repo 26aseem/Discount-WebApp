@@ -29,7 +29,7 @@ exports.createCategory = (req, res) => {
 };
 
 exports.getCategory = (req, res) => {
-    return res.json(req.category)
+    return res.json(req.category);
     
 };
 

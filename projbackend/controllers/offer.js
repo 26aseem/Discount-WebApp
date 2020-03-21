@@ -5,7 +5,7 @@ const fs = require("fs");  //File System
 
 exports.getOfferById = (req, res, next, id) => {
     Offer.findById(id)
-    .populate("category")
+    .populate("merchants.merchant", "merchantName, contact")
     .exec((err, offer) => {
         if(err){
             return res.status(400).json({
@@ -28,8 +28,17 @@ exports.createOffer = (req, res) => {
             });
         }
 
-        let offer = req.offer;
-        offer = _.extend
+        //destructure the fields
+    const { offerName, offerDesc, offerStartDate, offerEndDate, merchant } = fields;
+
+    if (!offerName || !offerDesc  || !offerStartDate || !offerEndDate || !merchant) 
+    {
+      return res.status(400).json({
+        error: "Please include all fields"
+      });
+    }
+
+    let offer = new Offer(fields);
 
         //handle file here
         if(file.photo){
@@ -97,21 +106,10 @@ exports.updateOffer = (req, res) => {
                 error: "Issues with the image"
             });
         }
-        //destructure the fields
-        const { offerName, offerDesc, offerStartDate, offerEndDate } = fields;
-        if(
-            !offerName ||
-            !offerDesc ||
-            !offerStartDate ||
-            !offerEndDate
-        ){
-            return res.status(400).json({
-                error: "Please include all the fields"
-            });
-        }
-
-
-        let offer = new Offer(fields);
+        
+        let offer = req.offer;
+        offer = _.extend(offer, fields);
+        
         if(file.photo){
             if(file.photo.size > 3*1024*1024){
                 return res.status(400).json({
@@ -132,5 +130,38 @@ exports.updateOffer = (req, res) => {
             return res.json(offer);
         });
 
+    })
+};
+
+
+exports.getAllOffers = (req, res) => {
+    let limit = req.query.limit ? parseInt(req.query.limit) : 8;
+    let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
+
+    Offer.find()
+    .select("-photo")
+    .populate("merchant")
+    .sort([[sortBy, "asc"]])
+    .limit(limit)
+    .exec((err, offers) => {
+        if(err){
+            return res.status(400).json({
+                error: "No offer FOUND"
+            });
+        }
+        //if(res.body.offer.merchant._id == id)
+            res.json(offers)
+    });
+};
+
+
+exports.getAllUniqueMerchants = (req, res) => {
+    Offer.distinct("Merchant", {}, (err, merchant) => {
+        if(err){
+            return res.status(400).json({
+                error: "No merchant found"
+            });
+        }
+        res.json(merchant);
     })
 };

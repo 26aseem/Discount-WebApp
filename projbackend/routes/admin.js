@@ -1,14 +1,16 @@
 const express = require("express");
-const router = express.Router();
+const adrouter = express.Router();
 
 const { getAdminById, getAdmin, getAllAdmins, updateAdmin } = require("../controllers/admin");
 const { isAuthenticated, isSignedIn } = require("../controllers/adminauth");
 
-router.param("adminId", getAdminById);
+//All Params
+adrouter.param("adminId", getAdminById);
 
-router.get("/admin/:adminId", isSignedIn, isAuthenticated, getAdmin);
-router.get("/admins", getAllAdmins);
-router.put("/admin/:adminId", isSignedIn, isAuthenticated, updateAdmin);
+//All Routes
+adrouter.get("/admin/:adminId", isSignedIn, isAuthenticated, getAdmin);
+adrouter.get("/admins", getAllAdmins);
+adrouter.put("/admin/:adminId", isSignedIn, isAuthenticated, updateAdmin);
 
 
-module.exports = router;
+module.exports = adrouter;

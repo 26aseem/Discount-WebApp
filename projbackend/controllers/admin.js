@@ -1,4 +1,4 @@
-const Admin = require("../models/admin");
+const Admin = require("../models/adminpanel");
 
 exports.getAdminById = (req, res, next, id) => {
     Admin.findById(id).exec((err,admin) => {

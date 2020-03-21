@@ -1,8 +1,17 @@
 const Merchant = require("../models/merchant");
+const formidable = require("formidable");
+const _ = require("lodash");
+const fs = require("fs");  //File System
+
+const { check, validationResult } = require('express-validator');
+var jwt = require('jsonwebtoken');
+var expressJwt = require('express-jwt');
 
 exports.getMerchantById = (req, res, next, id) => {
-    Merchant.findById(id).exec((err,merchant) => {
-        if(err || !merchant){
+    Merchant.findById(id)
+    .populate("category")
+    .exec((err,merchant) => {
+        if(err){
             return res.status(400).json({
                 error: "No merchant was found in the database"
             });
@@ -11,7 +20,60 @@ exports.getMerchantById = (req, res, next, id) => {
         req.profile = merchant;
         next();
     });
+    
 };
+
+
+//merchantsignup is created
+exports.merchantsignup = (req, res) => {
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+
+    form.parse(req, (err, fields, file) => {
+        if(err){
+            return res.status(400).json({
+                error: "Issues with the image"
+            });
+        }
+
+        //destructure the fields
+    const { merchantName, ownerName, city, state, country,streetAddress,
+        pincode, email, contact, altcontact, description, category, username, password, merchantId } = fields;
+
+    if (!merchantName || !ownerName || !city || !state || !country || !streetAddress
+        || !pincode  || !email || !contact || !description || !category || !username || !password) 
+    {
+      return res.status(400).json({
+        error: "Please include all fields"
+      });
+    }
+
+    let merchant = new Merchant(fields);
+
+        //handle file here
+        if(file.merchantPhoto){
+            if(file.merchantPhoto.size > 3*1024*1024){
+                return res.status(400).json({
+                    error: "File size greater than 3 MB"
+                });
+            }
+            merchant.merchantPhoto.data = fs.readFileSync(file.merchantPhoto.path)
+            merchant.merchantPhoto.contentType = file.merchantPhoto.type
+        }
+
+        //save to the db
+        merchant.save((err, merchant) => {
+            if(err){
+                res.status(400).json({
+                    error: "Saving image to the Database failed"
+                });
+            }
+            return res.json(merchant);
+        });
+
+    })
+};
+
 
 
 exports.getMerchant = (req, res) => {
@@ -92,29 +154,10 @@ exports.updateMerchant = (req, res) => {
                 error: "Issues with the image"
             });
         }
-        //destructure the fields
-        const { merchantName, ownerName, city, state, country, streetAddress, pincode, email, contact, altcontact, category, description } = fields;
-        if(
-            !merchantName ||
-            !ownerName ||
-            !city ||
-            !state ||
-            !country ||
-            !streetAddress ||
-            !pincode ||
-            !email ||
-            !contact ||
-            !category ||
-            !description
-
-        ){
-            return res.status(400).json({
-                error: "Please include all the fields"
-            });
-        }
-
-
-        let merchant = new Merchant(fields);
+       
+        let merchant = req.merchant;
+        merchant = _.extend(merchant, fields);
+       
         if(file.merchantPhoto){
             if(file.merchantPhoto.size > 3*1024*1024){
                 return res.status(400).json({
@@ -140,4 +183,66 @@ exports.updateMerchant = (req, res) => {
         });
 
     })
+};
+
+
+exports.merchantsignin = (req, res) => {
+    const {username, password} = req.body;   //This destructuring
+    
+    //Check for errors
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        return res.status(422).json({
+            error: errors.array()[0].msg,
+            errorParam: errors.array()[0].param
+        });
+    }
+    Merchant.findOne({username}, (err,merchant) => {
+        if(err || !merchant) {
+            return res.status(400).json({
+                error: "Merchant Not Found. Trying Sign Up!"
+            });
+        }
+
+        if(!merchant.authenticate(password)){
+            return res.status(401).json({
+                error: "Username and Password do not match"
+            });
+        }
+
+        //Create Token
+        const token = jwt.sign({_id: merchant._id}, process.env.SECRET)
+        //Put Token in cookie
+        res.cookie("token, token", {expire: new Date() + 9999});
+
+        //send response to front end
+        const {_id, username} = merchant;
+        return res.json({token, merchant: { _id, username}});
+
+    });
+
+};
+
+exports.merchantsignout = (req,res) => {
+    res.json({
+        message: "Merchant Signout"
+    });
+};
+
+
+//protected routes
+exports.isSignedIn = expressJwt({
+    secret: process.env.SECRET,
+    userProperty: "auth"
+});
+
+//custom middlewares
+exports.isAuthenticated = ( req, res, next) => {
+    let checker = req.profile && req.auth && req.profile._id == req.auth._id;
+    if(!checker){
+        return res.status(403).json({
+            error: "ACCESS DENIED"
+        });
+    }
+    next();
 };
