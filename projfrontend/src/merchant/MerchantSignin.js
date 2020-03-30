@@ -1,6 +1,6 @@
 import React, {useState} from"react"
 import Base from "../core/Base"
-import {Link} from "react-router-dom"
+import {Link, Redirect} from "react-router-dom"
 import {signin, authenticate, isAuthenticated} from "../auth/helper/merchantIndex"
 
 const MerchantSignin = () => {
@@ -77,7 +77,7 @@ const MerchantSignin = () => {
             
         }
         if(isAuthenticated){
-            return <redirect to="/" />
+            return <Redirect to="/" />
         }
     };
 

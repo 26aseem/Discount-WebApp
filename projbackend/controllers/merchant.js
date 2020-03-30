@@ -129,7 +129,7 @@ exports.merchantPhoto = (req, res, next) => {
 };
 
 exports.deleteMerchant = (req, res) => {
-    let merchant = req.merchant;
+    let merchant = req.profile;
     merchant.remove((err, deletedMerchant) => {
         if(err){
             return res.status(400).json({
@@ -238,6 +238,9 @@ exports.isSignedIn = expressJwt({
 
 //custom middlewares
 exports.isAuthenticated = ( req, res, next) => {
+    console.log(req)
+    //let checker = req.profile && req.auth;
+    // Auth of admin is coming but required  is merchant
     let checker = req.profile && req.auth && req.profile._id == req.auth._id;
     if(!checker){
         return res.status(403).json({

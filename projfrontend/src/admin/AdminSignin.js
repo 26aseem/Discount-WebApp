@@ -1,6 +1,6 @@
 import React, {useState} from"react"
 import Base from "../core/Base"
-import {Link} from "react-router-dom"
+import {Link, Redirect} from "react-router-dom"
 import {signin, authenticate, isAuthenticated} from "../auth/helper/adminIndex"
 
 const AdminSignin = () => {
@@ -57,13 +57,13 @@ const AdminSignin = () => {
         if(didRedirect){
             if(admin){
                 return(
-                    <p> Redirect to Admin Dashboard</p>
+                    <Redirect to="/admin/dashboard" />
                 )
             }
             
         }
         if(isAuthenticated){
-            return <redirect to="/" />
+            //return <Redirect to="/" />
         }
     };
 

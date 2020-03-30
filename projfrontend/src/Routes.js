@@ -1,10 +1,21 @@
 import React from 'react'
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
 import Home from "./core/Home"
+import AdminRoute from "./auth/helper/AdminRoute"
+import MerchantRoute from "./auth/helper/MerchantRoute"
 import AdminSignup from "./admin/AdminSignup"
 import AdminSignin from "./admin/AdminSignin"
 import MerchantSignup from "./merchant/MerchantSignup"
 import MerchantSignin from "./merchant/MerchantSignin"
+
+import AdminDashboard from "./admin/AdminDashBoard"
+import AddCategory from "./admin/paths/AddCategory"
+import ManageCategories from "./admin/paths/ManageCategories"
+import AddMerchant from "./admin/paths/AddMerchant"
+import ManageMerchants from "./admin/paths/ManageMerchants"
+
+import MerchantDashboard from "./merchant/MerchantDashBoard"
+
 
 export default function Routes(){
     return(
@@ -15,8 +26,15 @@ export default function Routes(){
                 <Route path="/adminsignin" component={AdminSignin}/>
                 <Route path="/merchantsignup" component={MerchantSignup}/>
                 <Route path="/merchantsignin" component={MerchantSignin}/>
-                <Route path="/" component="" />
-                <Route path="/" component="" />
+                
+                <AdminRoute path="/admin/dashboard" component={AdminDashboard}/>
+                <AdminRoute path="/admin/create/category" component={AddCategory}/>
+                <AdminRoute path="/admin/categories" component={ManageCategories}/>
+                <AdminRoute path="/admin/create/merchant" component={AddMerchant}/>
+                <AdminRoute path="/admin/merchants" component={ManageMerchants}/>
+
+                <MerchantRoute path="/merchant/dashboard" component={MerchantDashboard}/>
+               
             </Switch>
         </Router>
     );

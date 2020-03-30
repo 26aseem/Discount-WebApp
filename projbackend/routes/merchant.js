@@ -4,18 +4,23 @@ const router = express.Router();
 //For Data Validation
 const { check, validationResult } = require('express-validator');
 
+
 //Imported from controllers/adminauth.js
 const { merchantsignup, merchantsignin, merchantsignout } = require('../controllers/merchant.js');
 
 const { getMerchantById, getMerchant, getAllMerchants, updateMerchant, merchantPhoto, deleteMerchant, isAuthenticated, isSignedIn } = require("../controllers/merchant");
+
+//const { getAdminById } = require("../controllers/admin");
+//router.param("adminId", getAdminById);
+
 
 router.param("merchantId", getMerchantById);
 
 router.get("/merchant/:merchantId", isSignedIn, isAuthenticated, getMerchant);
 router.get("/merchant/:merchantId", merchantPhoto);
 router.get("/merchants", getAllMerchants);
-router.put("/merchant/:merchantId", /*isSignedIn, isAuthenticated,*/ updateMerchant);
-router.delete("/merchant/:merchantId", isSignedIn, isAuthenticated, deleteMerchant);
+router.put("/merchant/:merchantId", isSignedIn, isAuthenticated, updateMerchant);
+router.delete("/merchant/:merchantId", deleteMerchant);
 
 
 //merchantsignup Route

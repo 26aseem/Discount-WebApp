@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import {Link, withRouter} from "react-router-dom"
+import {signout, isAuthenticated} from "../auth/helper/adminIndex"
 
 const currentTab = (history, path) => {
     if(history.location.pathname === path){
@@ -19,18 +20,26 @@ const Navbar = ({history}) => (
                         Home
                     </Link>
                 </li>
+                {isAuthenticated() && isAuthenticated().admin &&
                 <li className="nav-item">
                     <Link style={currentTab(history,"/admin/dashboard")}
                      className="nav-link" to="/admin/dashboard">
                         Admin Dashboard
                     </Link>
                 </li>
+                }
+
+                {isAuthenticated() && isAuthenticated().admin &&
                 <li className="nav-item">
                     <Link style={currentTab(history,"/merchant/dashboard")}
                     className="nav-link" to="/merchant/dashboard">
                         Merchant Dashboard
                     </Link>
                 </li>
+                }
+
+                {!isAuthenticated() && (
+                <Fragment>
                 <li className="nav-item">
                     <Link style={currentTab(history,"/adminsignup")}
                     className="nav-link" to="/adminsignup">
@@ -43,6 +52,11 @@ const Navbar = ({history}) => (
                         Admin Signin
                     </Link>
                 </li>
+                </Fragment>
+                )}
+
+                {!isAuthenticated() && (
+                <Fragment>
                 <li className="nav-item">
                     <Link style={currentTab(history,"/merchantsignup")}
                     className="nav-link" to="/merchantsignup">
@@ -55,18 +69,39 @@ const Navbar = ({history}) => (
                         Merchant Signin
                     </Link>
                 </li>
+                </Fragment>
+                )}
+                
+
+                {isAuthenticated() && (
                 <li className="nav-item">
-                    <Link style={currentTab(history,"/adminsignout")}
-                    className="nav-link" to="/adminsignout">
-                        Admin Signout
-                    </Link>
-                </li>
+                <span
+                className="nav-link text-warning"
+                onClick={() => {
+                    signout(() => {
+                        history.push("/")
+                    })
+                }}
+                >
+                    Admin Signout
+                </span>
+            </li>
+                )}
+
+                {isAuthenticated() && (
                 <li className="nav-item">
-                    <Link style={currentTab(history,"/merchantsignout")}
-                    className="nav-link" to="/merchantsignout">
-                        Merchant Signout
-                    </Link>
-                </li>
+                <span
+                className="nav-link text-warning"
+                onClick={() => {
+                    signout(() => {
+                        history.push("/")
+                    })
+                }}
+                >
+                    Merchant Signout
+                </span>
+            </li>
+                )}
             </ul>
         </div>
     )
