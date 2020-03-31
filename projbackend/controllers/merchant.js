@@ -38,13 +38,13 @@ exports.merchantsignup = (req, res) => {
 
         //destructure the fields
     const { merchantName, ownerName, city, state, country,streetAddress,
-        pincode, email, contact, altcontact, description, category, username, password, merchantId } = fields;
+        pincode, email, contact, altcontact, description, category, username, password } = fields;
 
     if (!merchantName || !ownerName || !city || !state || !country || !streetAddress
-        || !pincode  || !email || !contact || !description || !category || !username || !password) 
+        || !pincode  || !email || !contact || !category || !username || !password) 
     {
       return res.status(400).json({
-        error: "Please include all fields"
+        error: "Please include all the Fields"
       });
     }
 
@@ -64,8 +64,9 @@ exports.merchantsignup = (req, res) => {
         //save to the db
         merchant.save((err, merchant) => {
             if(err){
+                console.log(err)
                 res.status(400).json({
-                    error: "Saving image to the Database failed"
+                    error: "Saving Image to the Database Failed"
                 });
             }
             return res.json(merchant);
@@ -216,8 +217,8 @@ exports.merchantsignin = (req, res) => {
         res.cookie("token, token", {expire: new Date() + 9999});
 
         //send response to front end
-        const {_id, username} = merchant;
-        return res.json({token, merchant: { _id, username}});
+        const {_id, username, merchantName, ownerName} = merchant;
+        return res.json({token, merchant: { _id, username, merchantName, ownerName}});
 
     });
 
@@ -249,3 +250,5 @@ exports.isAuthenticated = ( req, res, next) => {
     }
     next();
 };
+
+

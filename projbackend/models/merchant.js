@@ -4,16 +4,8 @@ const crypto = require('crypto');
 const uuidv1 = require('uuid/v1');
 const {ObjectId} = mongoose.Schema;
 
+
 var merchantSchema = mongoose.Schema({
-    merchantID: {
-        type: String,
-        trim: true,
-        unique: true,
-        //required: true,
-        minlength: 10,
-        maxlength:10
-    },
-    
     merchantName: {
         type: String,
         required: true,
@@ -86,7 +78,6 @@ var merchantSchema = mongoose.Schema({
 
     description: {
         type: String,
-        trim: true,
         maxlength: 2000
     },
 

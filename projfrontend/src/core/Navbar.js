@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react'
 import {Link, withRouter} from "react-router-dom"
 import {signout, isAuthenticated} from "../auth/helper/adminIndex"
+import {msignout, misAuthenticated} from "../auth/helper/merchantIndex"
 
 const currentTab = (history, path) => {
     if(history.location.pathname === path){
@@ -29,7 +30,7 @@ const Navbar = ({history}) => (
                 </li>
                 }
 
-                {isAuthenticated() && isAuthenticated().admin &&
+                {misAuthenticated() && misAuthenticated().merchant &&
                 <li className="nav-item">
                     <Link style={currentTab(history,"/merchant/dashboard")}
                     className="nav-link" to="/merchant/dashboard">
@@ -38,7 +39,7 @@ const Navbar = ({history}) => (
                 </li>
                 }
 
-                {!isAuthenticated() && (
+                {!isAuthenticated() && !misAuthenticated() && (
                 <Fragment>
                 <li className="nav-item">
                     <Link style={currentTab(history,"/adminsignup")}
@@ -55,7 +56,7 @@ const Navbar = ({history}) => (
                 </Fragment>
                 )}
 
-                {!isAuthenticated() && (
+                {!isAuthenticated() && !misAuthenticated() && (
                 <Fragment>
                 <li className="nav-item">
                     <Link style={currentTab(history,"/merchantsignup")}
@@ -73,7 +74,7 @@ const Navbar = ({history}) => (
                 )}
                 
 
-                {isAuthenticated() && (
+                {isAuthenticated().admin && (
                 <li className="nav-item">
                 <span
                 className="nav-link text-warning"
@@ -88,7 +89,7 @@ const Navbar = ({history}) => (
             </li>
                 )}
 
-                {isAuthenticated() && (
+                {misAuthenticated().merchant && (
                 <li className="nav-item">
                 <span
                 className="nav-link text-warning"

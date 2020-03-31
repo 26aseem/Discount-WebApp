@@ -1,7 +1,7 @@
 import React, {useState} from"react"
 import Base from "../core/Base"
 import {Link} from "react-router-dom"
-import { signup } from "../auth/helper/merchantIndex";
+import { msignup } from "../auth/helper/merchantIndex";
 
 const MerchantSignup = () => {
 
@@ -35,7 +35,7 @@ const MerchantSignup = () => {
     const onSubmit = event => {
         event.preventDefault()
         setValues({...values, error: false})
-        signup({merchantName, ownerName, city, state, country, streetAddress, pincode, contact, altcontact, category, description, merchantPhoto, 
+        msignup({merchantName, ownerName, city, state, country, streetAddress, pincode, contact, altcontact, category, description, merchantPhoto, 
             email, username, password})
         .then(data => {
             if(data.error){

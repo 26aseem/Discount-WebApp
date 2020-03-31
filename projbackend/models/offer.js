@@ -26,7 +26,7 @@ const offerSchema = new mongoose.Schema({
         contentType: String
     },
 
-    merchant: {
+    merch: {
         type: ObjectId,
         ref: "Merchant"
     }

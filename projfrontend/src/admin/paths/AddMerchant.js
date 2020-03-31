@@ -6,7 +6,7 @@ import {isAuthenticated} from "../../auth/helper/adminIndex"
 
 export default function AddMerchant() {
 
-    const {token} = isAuthenticated();
+    //const {admin,token} = isAuthenticated();
 
     const [values, setValues] = useState({
         merchantName: "",
@@ -70,10 +70,10 @@ export default function AddMerchant() {
     const onSubmit = (event) => {
         event.preventDefault();
         setValues({...values, error: "", loading: true})
-        createmerchant(token, formData)
+        createmerchant(formData)
         .then(data => {
             if(data.error){
-                setValues({...values, error:data.error})
+                setValues({...values, error:data.error,CreatedMerchant: ""})
             }else{
                 setValues({
                     ...values,
@@ -92,17 +92,18 @@ export default function AddMerchant() {
                     username: "",
                     password: "",
                     loading: false,
-                    CreatedMerchant: data.name
+                    error: "",
+                    CreatedMerchant: data.merchantName
                 })
             }
         }
 
         )
-        .catch()
+        .catch(console.log("data.error"))
     }
 
     const handleChange = name => event => {
-        const value = name ==="photo" ? event.target.files[0] : event.target.value
+        const value = name ==="merchantPhoto" ? event.target.files[0] : event.target.value
         formData.set(name, value)
         setValues({...values, [name]:value})
     };
@@ -200,10 +201,10 @@ export default function AddMerchant() {
           <div className="form-group">
             <textarea
               onChange={handleChange("description")}
-              name="description"
               className="form-control"
               placeholder="Description"
               value={description}
+              name="description"
             />
           </div>
 
@@ -259,9 +260,9 @@ export default function AddMerchant() {
           <div className="form-group">
             <label className="btn btn-block btn-success">
               <input
-                onChange={handleChange("photo")}
+                onChange={handleChange("merchantPhoto")}
                 type="file"
-                name="photo"
+                name="merchantPhoto"
                 accept="image"
                 placeholder="choose a file"
               />
@@ -282,7 +283,7 @@ export default function AddMerchant() {
         <Base
         title="Add a Product here!"
         description="Welcome to Product Creation Section"
-        className="container bg-info p-4"
+        className="container bg-success p-4"
         >
         
         <Link to="/admin/dashboard" className="btn brn-md btn-dark mb-3">

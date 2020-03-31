@@ -1,68 +1,47 @@
 import { API } from "../../backend"
 
-// Category
-const createcategory = (userid, token, category) => {
-    return fetch (`${API}/category/create/${userid}`, {
+// Offers
+export const createoffer = (merchantid, token, offer) => {
+    return fetch (`${API}/offer/create/${merchantid}`, {
         method: "POST",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json",
+          //"Content-Type": "application/json",
          Authorization: `Bearer ${token}`
        },
-    body: JSON.stringify(category)
+    body: offer
     
     })
     .then(response => {
+        console.log(response)
         return response.json();
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log("bb"));
 };
-export default createcategory;
+//export default createoffer;
 
-// get all categories
-export const getcategories = () => {
-    return fetch(`${API}/categories`,{
-        method: "GET"
-    })
-    .then(response => {
-        return response.json();
-    })
-    .catch(err => console.log(err));
-};
 
-// Product Call
-
-// Add a Product
- export const createproduct = (userid, token, product) => {
-    return fetch (`${API}/product/create/${userid}`, {
-        method: "POST",
+// get all offers
+export const getoffers = (merchantId,token) => {
+    return fetch(`${API}/offers/${merchantId}`,{
+        method: "GET",
         headers: {
-          Accept: "application/json",
-         Authorization: `Bearer ${token}`
-       },
-    body: product
-    
+            Authorization: `Bearer ${token}`
+        }
     })
     .then(response => {
+        console.log(response)
         return response.json();
+        
     })
     .catch(err => console.log(err));
 };
 
-// get all products
-export const getproducts = () => {
-    return fetch(`${API}/products`,{
-        method: "GET"
-    })
-    .then(response => {
-        return response.json();
-    })
-    .catch(err => console.log(err));
-};
 
-// delete a product
-export const deleteproduct = (productId, userId, token) => {
-    return fetch(`${API}/product/${productId}/${userId}`,{
+
+// delete a offer
+export const deleteoffer = (offerId, merchantId, token) => {
+    return fetch(`${API}/offer/${offerId}/${merchantId}`,{
         method: "DELETE",
         headers: {
             Accept: "application/json",
@@ -79,9 +58,9 @@ export const deleteproduct = (productId, userId, token) => {
   
 
 
-// get a product
-export const getproduct = (productId) => {
-    return fetch(`${API}/product/${productId}`,{
+// get a offer
+export const getoffer = (offerId, merchantId) => {
+    return fetch(`${API}/offer/${offerId}/${merchantId}`,{
         method: "GET",
     })
     .then(response => {
@@ -91,16 +70,75 @@ export const getproduct = (productId) => {
 };
 
 
-// update a product
+// update an offer
 
-export const updateproduct = (productId, userId, token, product) => {
-    return fetch(`${API}/product${productId}/${userId}`,{
+export const updateoffer = (offerId, token, merchantId, offer) => {
+    return fetch(`${API}/offer/${offerId}/${merchantId}`,{
         method: "PUT",
         headers: {
             Accept: "application/json",
            Authorization: `Bearer ${token}`
          },
-      body: product
+      body: offer
+      
+      })
+      .then(response => {
+          return response.json();
+      })
+      .catch(err => console.log(err));
+  };
+  
+
+
+
+
+// Merchant Call
+
+// delete a merchant
+export const deletemerchant = (merchantId,token) => {
+    return fetch(`${API}/merchant/${merchantId}`,{
+        method: "DELETE",
+        headers: {
+            Accept: "application/json",
+           Authorization: `Bearer ${token}`
+         }
+      
+      })
+      .then(response => {
+          console.log(response)
+        return response.json();
+    })
+    .catch(err => console.log(err));
+}
+  
+
+
+// get a merchant
+export const getmerchant = (merchantId, token) => {
+    return fetch(`${API}/merchant/${merchantId}`,{
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        
+        return response.json();
+    })
+    .catch(err => console.log(err));
+};
+
+
+// update a merchant
+
+export const updatemerchant = (merchantId, token, merchant) => {
+    return fetch(`${API}/merchant${merchant}`,{
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+           Authorization: `Bearer ${token}`
+         },
+      body: merchant
       
       })
       .then(response => {

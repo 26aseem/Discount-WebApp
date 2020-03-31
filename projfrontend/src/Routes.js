@@ -15,6 +15,9 @@ import AddMerchant from "./admin/paths/AddMerchant"
 import ManageMerchants from "./admin/paths/ManageMerchants"
 
 import MerchantDashboard from "./merchant/MerchantDashBoard"
+import AddOffer from "./merchant/paths/AddOffer"
+import ManageOffers from "./merchant/paths/ManageOffers"
+import ManageMerchant from "./merchant/paths/ManageMerchant"
 
 
 export default function Routes(){
@@ -34,6 +37,9 @@ export default function Routes(){
                 <AdminRoute path="/admin/merchants" component={ManageMerchants}/>
 
                 <MerchantRoute path="/merchant/dashboard" component={MerchantDashboard}/>
+                <MerchantRoute path="/merchant/create/offer" component={AddOffer}/>
+                <MerchantRoute path="/merchant/offers" component={ManageOffers}/>
+                <MerchantRoute path="/merchant/merchant" component={ManageMerchant}/>
                
             </Switch>
         </Router>

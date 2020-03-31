@@ -86,7 +86,7 @@ const AdminSignup = () => {
         style={{display: success ? "" : "none"}}
         >
             New Admin was created successfully.
-            <Link to="/admin/signin">Login Here</Link>
+            <Link to="/adminsignin">Login Here</Link>
         </div>
         </div>
         </div>

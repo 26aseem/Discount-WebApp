@@ -1,20 +1,23 @@
 import React, {useState, useEffect} from 'react'
-import Base from "../core/Base"
+import Base from "../../core/Base"
 import {Link} from "react-router-dom"
-import { isAuthenticated } from '../auth/helper';
-import { getproducts, deleteproduct } from './helper/adminapicall';
-export default function ManageProducts() {
+import { misAuthenticated } from '../../auth/helper/merchantIndex';
+import { getoffers, deleteoffer } from '../helper/merchantapicall';
 
-    const [products, setproducts] =useState([]);
+export default function ManageOffers() {
 
-    const {user, token} = isAuthenticated();
+    const [offers, setoffers] =useState([]);
 
+    const {merchant, token} = misAuthenticated();
+   
     const preload = () => {
-        getproducts().then(data => {
+        getoffers(merchant._id, token).then(data => {
+          
             if(data.error) {
                 console.log(data.error);
             }else{
-                setproducts(data);
+                setoffers(data);
+                console.log(data)
             }
         })
     }
@@ -23,8 +26,8 @@ export default function ManageProducts() {
         preload()
     }, [])
 
-    const deleteThisProduct = (productId) => {
-        deleteproduct(productId, user._id, token)
+    const deleteThisOffer = (offerId) => {
+      deleteoffer(offerId,merchant._id,token)
         .then(data=> {
             if(data.error){
                 console.log(data.error)
@@ -38,37 +41,39 @@ export default function ManageProducts() {
 
 
     return (
-        <Base title="Welcome Admin" description="Manage Products here">
-        <Link className="btn btn-info" to={`/admin/dashboard`}>
-        <span className="">Admin Home</span>
+        <Base title="Welcome Merchant" description="Manage Offers here">
+        <Link className="btn btn-info" to={`/merchant/dashboard`}>
+        <span className="">Merchant Home</span>
       </Link>
       <div className="row">
         <div className="col-12">
-          <h2 className="text-center text-success my-3 mt-5 mb-5">Products</h2>
+          <h2 className="text-center text-success my-3 mt-5 mb-5">Offers</h2>
 
-            {products.map((product, index) => (
+            {offers.map((offer, index) => (
               
                 <div key={index} className="row text-center mb-2 ml-3 ">
                 
                   <div className="col-1">
                     <Link
                       className="btn btn-success"
-                      to={`/admin/product/update/productId`}
+                      to={`/merchant/offer/update/offerId`}
                     >
-                    <span className="">Update</span>
+                    <span className="">
+                      Update Offer
+                      </span>
                     </Link>
                   </div>
                 
                 <div className="col-1">
                   <button onClick={() => {
-                      deleteThisProduct(product._id)
+                      deleteThisOffer(offer._id)
                   }} className="btn btn-danger">
-                    Delete
+                    Delete Offer
                   </button>
                 </div>
               
                 <div className="col-7 offset-1">
-                    <h3 className="text-white text-left">{product.name}</h3>
+                    <h3 className="text-white text-left">{offer.offerName}</h3>
                 </div>
 
               </div>

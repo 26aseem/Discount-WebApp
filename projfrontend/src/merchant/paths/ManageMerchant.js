@@ -1,20 +1,20 @@
 import React, {useState, useEffect} from 'react'
-import Base from "../core/Base"
+import Base from "../../core/Base"
 import {Link} from "react-router-dom"
-import { isAuthenticated } from '../auth/helper';
-import { getproducts, deleteproduct } from './helper/adminapicall';
-export default function ManageProducts() {
+import { isAuthenticated } from '../../auth/helper/adminIndex';
+import { getmerchants, deletemerchant } from '../../admin/helper/adminapicall';
+export default function ManageMerchant() {
 
-    const [products, setproducts] =useState([]);
+    const [merchants, setmerchants] =useState([]);
 
-    const {user, token} = isAuthenticated();
-
+    const {admin, token} = isAuthenticated();
+   
     const preload = () => {
-        getproducts().then(data => {
+        getmerchants().then(data => {
             if(data.error) {
                 console.log(data.error);
             }else{
-                setproducts(data);
+                setmerchants(data);
             }
         })
     }
@@ -23,8 +23,8 @@ export default function ManageProducts() {
         preload()
     }, [])
 
-    const deleteThisProduct = (productId) => {
-        deleteproduct(productId, user._id, token)
+    const deleteThisMerchant = (merchantId) => {
+      deletemerchant(merchantId,token)
         .then(data=> {
             if(data.error){
                 console.log(data.error)
@@ -38,22 +38,22 @@ export default function ManageProducts() {
 
 
     return (
-        <Base title="Welcome Admin" description="Manage Products here">
-        <Link className="btn btn-info" to={`/admin/dashboard`}>
-        <span className="">Admin Home</span>
+        <Base title="Welcome Merchant" description="Manage Merchant Account here">
+        <Link className="btn btn-info" to={`/merchant/dashboard`}>
+        <span className="">Merchant Home</span>
       </Link>
       <div className="row">
         <div className="col-12">
-          <h2 className="text-center text-success my-3 mt-5 mb-5">Products</h2>
+          <h2 className="text-center text-success my-3 mt-5 mb-5">Merchants</h2>
 
-            {products.map((product, index) => (
+            {merchants.map((merchant, index) => (
               
                 <div key={index} className="row text-center mb-2 ml-3 ">
                 
                   <div className="col-1">
                     <Link
                       className="btn btn-success"
-                      to={`/admin/product/update/productId`}
+                      to={`/admin/merchant/update/merchantId`}
                     >
                     <span className="">Update</span>
                     </Link>
@@ -61,14 +61,14 @@ export default function ManageProducts() {
                 
                 <div className="col-1">
                   <button onClick={() => {
-                      deleteThisProduct(product._id)
+                      deleteThisMerchant(merchant._id)
                   }} className="btn btn-danger">
                     Delete
                   </button>
                 </div>
               
                 <div className="col-7 offset-1">
-                    <h3 className="text-white text-left">{product.name}</h3>
+                    <h3 className="text-white text-left">{merchant.merchantName}</h3>
                 </div>
 
               </div>

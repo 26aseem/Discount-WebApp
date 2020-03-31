@@ -1,7 +1,7 @@
 import React, {useState} from"react"
 import Base from "../core/Base"
 import {Link, Redirect} from "react-router-dom"
-import {signin, authenticate, isAuthenticated} from "../auth/helper/merchantIndex"
+import {msignin, mauthenticate, misAuthenticated} from "../auth/helper/merchantIndex"
 
 const MerchantSignin = () => {
 
@@ -14,7 +14,7 @@ const MerchantSignin = () => {
     });
     
     const { username, password, error, loading, didRedirect } = values
-    const {merchant} = isAuthenticated();
+    const {merchant} = misAuthenticated();
 
 
     const handleChange = name => event => {
@@ -24,12 +24,12 @@ const MerchantSignin = () => {
     const onSubmit = event => {
         event.preventDefault()
         setValues({...values, error: false, loading:true})
-        signin({username, password})
+        msignin({username, password})
         .then(data => {
             if(data.error){
                 setValues({...values, error: data.error, loading: false})
             } else{
-                authenticate(data, () => {
+                mauthenticate(data, () => {
                     setValues({
                         ...values,
                         didRedirect: true
@@ -71,13 +71,13 @@ const MerchantSignin = () => {
         if(didRedirect){
             if(merchant){
                 return(
-                    <p> Redirect to Merchant</p>
+                    <Redirect to="/merchant/dashboard" />
                 )
             }
             
         }
-        if(isAuthenticated){
-            return <Redirect to="/" />
+        if(misAuthenticated){
+            return <redirect to="/" />
         }
     };
 

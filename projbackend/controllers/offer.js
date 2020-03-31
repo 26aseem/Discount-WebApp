@@ -23,16 +23,19 @@ exports.createOffer = (req, res) => {
 
     form.parse(req, (err, fields, file) => {
         if(err){
+            console.log(err)
             return res.status(400).json({
                 error: "Issues with the image"
             });
         }
 
         //destructure the fields
-    const { offerName, offerDesc, offerStartDate, offerEndDate, merchant } = fields;
+    const { offerName, offerDesc, offerStartDate, offerEndDate, merch } = fields;
 
-    if (!offerName || !offerDesc  || !offerStartDate || !offerEndDate || !merchant) 
+    if (!offerName || !offerDesc  || !offerStartDate || !offerEndDate || !merch) 
     {
+        console.log(merch,offerName,offerEndDate,offerStartDate,offerDesc)
+        
       return res.status(400).json({
         error: "Please include all fields"
       });
@@ -40,8 +43,10 @@ exports.createOffer = (req, res) => {
 
     let offer = new Offer(fields);
 
+
         //handle file here
         if(file.photo){
+            console.log("photofound")
             if(file.photo.size > 3*1024*1024){
                 return res.status(400).json({
                     error: "File size greater than 3 MB"
@@ -54,6 +59,7 @@ exports.createOffer = (req, res) => {
         //save to the db
         offer.save((err, offer) => {
             if(err){
+                console.log(err)
                 res.status(400).json({
                     error: "Saving image to the Database failed"
                 });
@@ -135,7 +141,7 @@ exports.updateOffer = (req, res) => {
 
 
 exports.getAllOffers = (req, res) => {
-    let limit = req.query.limit ? parseInt(req.query.limit) : 8;
+    let limit = req.query.limit ? parseInt(req.query.limit) : 100;
     let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
 
     Offer.find()

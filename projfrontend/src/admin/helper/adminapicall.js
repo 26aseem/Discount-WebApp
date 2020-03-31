@@ -64,7 +64,7 @@ export const getcategory = (categoryId) => {
 };
 
 
-// update a merchant
+// update a category
 
 export const updatecategory = (categoryId, token, adminId, category) => {
     return fetch(`${API}/category/${categoryId}/${adminId}`,{
@@ -89,12 +89,12 @@ export const updatecategory = (categoryId, token, adminId, category) => {
 // Merchant Call
 
 // Add a Merchant
- export const createmerchant = (token, merchant) => {
+ export const createmerchant = (merchant) => {
     return fetch (`${API}/merchantsignup`, {
         method: "POST",
         headers: {
           Accept: "application/json",
-         Authorization: `Bearer ${token}`
+         //Authorization: `Bearer ${token}`
        },
     body: merchant
     

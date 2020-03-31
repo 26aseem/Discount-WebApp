@@ -2,7 +2,7 @@ import {API} from "../../backend"
 // API is basically path
 
 // Backend for Signup
-export const signup = merchant => {
+export const msignup = merchant => {
     return fetch(`${API}/merchantsignup`, {
         method: "POST",
         headers: {
@@ -19,7 +19,7 @@ export const signup = merchant => {
 
 
 // Backend for Signin
-export const signin = merchant => {
+export const msignin = merchant => {
     return fetch(`${API}/merchantsignin`, {
         method: "POST",
         headers: {
@@ -35,7 +35,7 @@ export const signin = merchant => {
 };
 
 
-export const authenticate = (data, next) => {
+export const mauthenticate = (data, next) => {
     if(typeof window !== "undefined") {
         localStorage.setItem("jwt", JSON.stringify(data))
         next();
@@ -43,7 +43,7 @@ export const authenticate = (data, next) => {
 }
 
 // Backend for Signout
-export const signout = next => {
+export const msignout = next => {
     if(typeof window !== "undefined") {
         localStorage.removeItem("jwt")
         next();
@@ -57,7 +57,7 @@ export const signout = next => {
     
 };
 
-export const isAuthenticated = () => {
+export const misAuthenticated = () => {
     if(typeof window == "undefined") {
         return false
     }

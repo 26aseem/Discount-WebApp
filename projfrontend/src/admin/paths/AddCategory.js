@@ -83,7 +83,7 @@ export default function AddCategory() {
                 value={name}
                 autoFocus
                 required
-                placeholder="For Ex. Summer Collection"
+                placeholder="For Ex. Food"
                 />
                 <button 
                 onClick ={onSubmit}
