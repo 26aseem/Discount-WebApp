@@ -111,6 +111,7 @@ export default function AddMerchant() {
     const createProductForm = () => (
         <form className="mt-4">
           <div className="form-group">
+          <label className="text-light"> Merchant Name <span className="text-warning">*</span> </label>
             <input
               onChange={handleChange("merchantName")}
               name="merchantName"
@@ -120,6 +121,7 @@ export default function AddMerchant() {
             />
           </div>
           <div className="form-group">
+          <label className="text-light"> Owner Name <span className="text-warning">*</span></label>
             <input
               onChange={handleChange("ownerName")}
               name="ownerName"
@@ -129,33 +131,7 @@ export default function AddMerchant() {
             />
           </div>
           <div className="form-group">
-            <input
-              onChange={handleChange("city")}
-              name="city"
-              className="form-control"
-              placeholder="City"
-              value={city}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              onChange={handleChange("state")}
-              name="state"
-              className="form-control"
-              placeholder="State"
-              value={state}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              onChange={handleChange("country")}
-              name="country"
-              className="form-control"
-              placeholder="Country"
-              value={country}
-            />
-          </div>
-          <div className="form-group">
+          <label className="text-light"> Street Address <span className="text-warning">*</span></label>
             <input
               onChange={handleChange("streetAddress")}
               name="streetAddress"
@@ -166,6 +142,38 @@ export default function AddMerchant() {
           </div>
           
           <div className="form-group">
+          <label className="text-light"> City <span className="text-warning">*</span></label>
+            <input
+              onChange={handleChange("city")}
+              name="city"
+              className="form-control"
+              placeholder="City"
+              value={city}
+            />
+          </div>
+          <div className="form-group">
+          <label className="text-light"> State <span className="text-warning">*</span></label>
+            <input
+              onChange={handleChange("state")}
+              name="state"
+              className="form-control"
+              placeholder="State"
+              value={state}
+            />
+          </div>
+          <div className="form-group">
+          <label className="text-light"> Country <span className="text-warning">*</span></label>
+            <input
+              onChange={handleChange("country")}
+              name="country"
+              className="form-control"
+              placeholder="Country"
+              value={country}
+            />
+          </div>
+                    
+          <div className="form-group">
+          <label className="text-light"> Pincode <span className="text-warning">*</span></label>
             <input
               onChange={handleChange("pincode")}
               name="pincode"
@@ -177,6 +185,7 @@ export default function AddMerchant() {
           </div>
           
           <div className="form-group">
+          <label className="text-light"> Contact <span className="text-warning">*</span></label>
             <input
               onChange={handleChange("contact")}
               name="contact"
@@ -188,6 +197,7 @@ export default function AddMerchant() {
           </div>
 
           <div className="form-group">
+          <label className="text-light"> Alternate Contact </label>
             <input
               onChange={handleChange("altcontact")}
               name="altcontact"
@@ -199,6 +209,7 @@ export default function AddMerchant() {
           </div>
 
           <div className="form-group">
+          <label className="text-light"> Merchant Description </label>
             <textarea
               onChange={handleChange("description")}
               className="form-control"
@@ -209,6 +220,7 @@ export default function AddMerchant() {
           </div>
 
           <div className="form-group">
+          <label className="text-light"> Username <span className="text-warning">*</span></label>
             <input
               onChange={handleChange("username")}
               name="username"
@@ -219,6 +231,7 @@ export default function AddMerchant() {
           </div>
 
           <div className="form-group">
+          <label className="text-light"> Email <span className="text-warning">*</span></label>
             <input
               onChange={handleChange("email")}
               name="email"
@@ -229,6 +242,7 @@ export default function AddMerchant() {
           </div>
 
           <div className="form-group">
+          <label className="text-light"> Password <span className="text-warning">*</span></label>
             <input
               onChange={handleChange("password")}
               name="password"
@@ -240,6 +254,7 @@ export default function AddMerchant() {
           </div>
 
           <div className="form-group">
+          <label className="text-light"> Merchant Category <span className="text-warning">*</span></label>
             <select
               onChange={handleChange("category")}
               className="form-control"
@@ -281,8 +296,8 @@ export default function AddMerchant() {
     
     return(
         <Base
-        title="Add a Product here!"
-        description="Welcome to Product Creation Section"
+        title="Add a Merchant here!"
+        description="Welcome to Merchant Creation Section"
         className="container bg-success p-4"
         >
         

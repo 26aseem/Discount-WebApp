@@ -74,7 +74,7 @@ const Navbar = ({history}) => (
                 )}
                 
 
-                {isAuthenticated().admin && (
+                {(isAuthenticated().admin || misAuthenticated().merchant) && (
                 <li className="nav-item">
                 <span
                 className="nav-link text-warning"
@@ -84,25 +84,12 @@ const Navbar = ({history}) => (
                     })
                 }}
                 >
-                    Admin Signout
+                    Signout
                 </span>
             </li>
                 )}
 
-                {misAuthenticated().merchant && (
-                <li className="nav-item">
-                <span
-                className="nav-link text-warning"
-                onClick={() => {
-                    signout(() => {
-                        history.push("/")
-                    })
-                }}
-                >
-                    Merchant Signout
-                </span>
-            </li>
-                )}
+                
             </ul>
         </div>
     )

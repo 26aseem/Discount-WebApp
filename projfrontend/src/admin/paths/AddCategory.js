@@ -15,7 +15,7 @@ export default function AddCategory() {
     const goBack = () => (
         <div className="mt-5">
             <Link 
-            className="btn btn-sm btn-info mb-3"
+            className="btn btn-sm btn-info mb-3 ml-3"
             to = "/admin/dashboard"
             >
                 Admin Dashboard
@@ -76,9 +76,9 @@ export default function AddCategory() {
     const myCategpryForm = () => (
         <form>
             <div className="form-group">
-                <p className="lead"> Enter the Category</p>
+                <p className="text-dark mt-3 ml-3"> Enter the Category <span className="text-info">*</span></p>
                 <input type="text"
-                className="form-control my-3"
+                className="form-control my-3 ml-3"
                 onChange={handleChange}
                 value={name}
                 autoFocus
@@ -87,7 +87,7 @@ export default function AddCategory() {
                 />
                 <button 
                 onClick ={onSubmit}
-                className="btn btn-outline-info"> Create Category </button>
+                className="btn btn-outline-info ml-3"> Create Category </button>
             </div>
         </form>
     )

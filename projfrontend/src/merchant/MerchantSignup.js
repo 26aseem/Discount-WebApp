@@ -1,7 +1,8 @@
-import React, {useState} from"react"
+import React, {useState, useEffect} from"react"
 import Base from "../core/Base"
 import {Link} from "react-router-dom"
-import { msignup } from "../auth/helper/merchantIndex";
+import { getcategories, createmerchant } from "../admin/helper/adminapicall"
+
 
 const MerchantSignup = () => {
 
@@ -16,31 +17,47 @@ const MerchantSignup = () => {
         contact: "",
         altcontact: "",
         category: "",
+        categories: [],
         description: "",
         merchantPhoto: "",
         email: "",
         username: "",
         password: "",
+        loading: false,
         error: "",
-        success: false
+        CreatedMerchant: "",
+        getaRedirect: false,
+        formData: ""
     });
 
-    const {merchantName, ownerName, city, state, country, streetAddress, pincode, contact, altcontact, category, description, merchantPhoto, 
-        email, username, password, error, success} = values
+    const {  merchantName, ownerName, city, state, country, streetAddress, pincode, contact,
+      altcontact,description,merchantPhoto, email, username, password, category, categories, loading, 
+      error, CreatedMerchant, getaRedirect, formData } = values;
 
-    const handleChange = name => event => {
-        setValues({...values, error: false, [name]: event.target.value})
+    const preload = () => {
+        getcategories().then(data=>{
+            if(data.error) {
+                setValues({...values, error: data})
+            } else{
+                setValues({...values, categories: data, formData: new FormData()});
+              
+            }
+        })
     }
 
-    const onSubmit = event => {
-        event.preventDefault()
-        setValues({...values, error: false})
-        msignup({merchantName, ownerName, city, state, country, streetAddress, pincode, contact, altcontact, category, description, merchantPhoto, 
-            email, username, password})
+    useEffect(() => {
+        preload();
+    }, [] )
+
+    
+    const onSubmit = (event) => {
+        event.preventDefault();
+        setValues({...values, error: "", loading: true})
+        createmerchant(formData)
         .then(data => {
             if(data.error){
-                setValues({...values, error: data.error, success: false})
-            } else{
+                setValues({...values, error:data.error,CreatedMerchant: ""})
+            }else{
                 setValues({
                     ...values,
                     merchantName: "",
@@ -52,20 +69,28 @@ const MerchantSignup = () => {
                     pincode: "",
                     contact: "",
                     altcontact: "",
-                    category: "",
                     description: "",
                     merchantPhoto: "",
                     email: "",
                     username: "",
                     password: "",
+                    loading: false,
                     error: "",
-                    success: true
-                });
+                    CreatedMerchant: data.merchantName
+                })
             }
-        })
-        .catch(console.log("Error in Merchant Signup"))
-    };
+        }
 
+        )
+        .catch(console.log("data.error"))
+    }
+
+    const handleChange = name => event => {
+        const value = name ==="merchantPhoto" ? event.target.files[0] : event.target.value
+        formData.set(name, value)
+        setValues({...values, [name]:value})
+    };
+    
     const onReset = event => {
         event.preventDefault()
         setValues({
@@ -98,80 +123,124 @@ const MerchantSignup = () => {
                 <div className="col-md-6 offset-sm-3 text-left">
                     <form>
                         <div className="form-group">
-                            <label className="text-light"> Merchant Name </label>
+                            <label className="text-light"> Merchant Name <span className="text-warning">*</span></label>
                             <input type="text"  className="form-control" 
                             onChange={handleChange("merchantName")}
                             value={merchantName}
+                            name={merchantName}
+                            placeholder="Merchant Name"
                             />
                         </div>
                         <div className="form-group">
-                            <label className="text-light"> Owner Name </label>
+                            <label className="text-light"> Owner Name <span className="text-warning">*</span></label>
                             <input type="text"  className="form-control" 
                             onChange={handleChange("ownerName")}
                             value={ownerName}
+                            nmae={ownerName}
+                            placeholder="Owner Name"
                             />
                         </div>
                         <div className="form-group">
-                            <label className="text-light"> City </label>
+                            <label className="text-light"> Street Address <span className="text-warning">*</span></label>
+                            <input type="text" className="form-control"
+                            onChange={handleChange("streetAddress")}
+                            value={streetAddress}
+                            name={streetAddress}
+                            placeholder="Country"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="text-light"> City <span className="text-warning">*</span></label>
                             <input type="text"  className="form-control" 
                             onChange={handleChange("city")}
                             value={city}
+                            name={city}
+                            placeholder="City"
                             />
                         </div>
                         <div className="form-group">
-                            <label className="text-light"> State </label>
+                            <label className="text-light"> State <span className="text-warning">*</span></label>
                             <input type="text" className="form-control"
                             onChange={handleChange("state")}
                             value={state}
+                            name={state}
+                            placeholder="State"
                             />
                         </div>
                         <div className="form-group">
-                            <label className="text-light"> Country </label>
+                            <label className="text-light"> Country <span className="text-warning">*</span></label>
                             <input type="text" className="form-control"
                             onChange={handleChange("country")}
                             value={country}
+                            name={country}
+                            placeholder="Country"
                             />
                         </div>
+                        
                         <div className="form-group">
-                            <label className="text-light"> Pincode </label>
+                            <label className="text-light"> Pincode <span className="text-warning">*</span></label>
                             <input type="number" className="form-control"
                             onChange={handleChange("pincode")}
                             value={pincode}
+                            name={pincode}
+                            placeholder="Pincode"
                             />
                         </div>
                         <div className="form-group">
-                            <label className="text-light"> Contact </label>
+                            <label className="text-light"> Contact <span className="text-warning">*</span></label>
                             <input type="number" className="form-control"
                             onChange={handleChange("contact")}
                             value={contact}
+                            name={contact}
+                            placeholder="Contact"
                             />
                         </div>
+                        
                         <div className="form-group">
-                            <label className="text-light"> Alternate Contact </label>
+                            <label className="text-light">Alternate Contact </label>
                             <input type="number" className="form-control"
-                            onChange={handleChange("alcontact")}
+                            onChange={handleChange("altcontact")}
                             value={altcontact}
+                            name={altcontact}
+                            placeholder="Alternate Contact"
                             />
                         </div>
-                        <div className="form-group">
-                            <label className="text-light"> Category </label>
-                            <input type="text" className="form-control"
-                            onChange={handleChange("category")}
-                            value={category}
-                            />
-                        </div>
+                        
                         <div className="form-group">
                             <label className="text-light"> Description </label>
-                            <input type="text" className="form-control"
+                            <textarea className="form-control"
                             onChange={handleChange("description")}
                             value={description}
+                            name={description}
+                            placeholder="Merchant Description"
                             />
                         </div>
+
+                        <div className="form-group">
+                        <label className="text-light"> Category <span className="text-warning">*</span></label>
+                            <select
+                            onChange={handleChange("category")}
+                            className="form-control"
+                            placeholder="Category"
+                            >
+                            <option>Select the Category</option>
+                            {categories && categories.map((cate, index) =>{
+                                return(
+                                <option key={index} value={cate._id}>
+                                    {cate.name}
+                                </option>
+                            )
+                            })}   
+                            </select>
+                            </div>
+
+
                         <div className="form-group">
                             <label className="text-light"> Merchant Photo </label>
                             <input type="file" className="form-control"
                             onChange={handleChange("merchantPhoto")}
-                            value={merchantPhoto}
+                            accept="image"
+                            name={merchantPhoto}
                             />
                         </div>
                         <div className="form-group">
@@ -179,6 +248,8 @@ const MerchantSignup = () => {
                             <input type="text"  className="form-control" 
                             onChange={handleChange("username")}
                             value={username}
+                            name={username}
+                            placeholder="Username"
                             />
                         </div>
                         <div className="form-group">
@@ -186,6 +257,8 @@ const MerchantSignup = () => {
                             <input type="email" className="form-control"
                             onChange={handleChange("email")}
                             value={email}
+                            name={email}
+                            placeholder="Email"
                             />
                         </div>
                         <div className="form-group">
@@ -193,10 +266,12 @@ const MerchantSignup = () => {
                             <input type="password" className="form-control"
                             onChange={handleChange("password")}
                             value={password}
+                            name={password}
+                            placeholder="Password"
                             />
                         </div>
-                        <button onClick={onSubmit} className="btn btn-success btn-block">Submit</button>
-                        <button className="btn btn-info btn-block" onClick={onReset}>Reset </button>
+                        <button onClick={onSubmit} className="btn btn-success btn-block ">Submit</button>
+                        <button className="btn btn-info btn-block mt-3" onClick={onReset}>Reset </button>
                     </form>
                 </div>
             </div>
@@ -204,10 +279,10 @@ const MerchantSignup = () => {
     };
 
     const successMessage = () => (
-        <div className="row">
+        <div className="row mt-3">
             <div className="col-md-6 offset-sm-3 text-left">
         <div className="alert alert-success"
-        style={{display: success ? "" : "none"}}
+        style={{display: CreatedMerchant ? "" : "none"}}
         >
             New Merchant Added successfully.
             <Link to="/merchantsignin">Login Here</Link>
@@ -236,7 +311,6 @@ const MerchantSignup = () => {
             {successMessage()}
             {errorMessage()}
             
-            <p className="text-white text-center">{JSON.stringify(values)}</p>
             
         </Base>
     );

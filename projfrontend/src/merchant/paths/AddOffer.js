@@ -111,6 +111,7 @@ export default function AddOffer() {
         const createOfferForm = () => (
             <form className="mt-4">
               <div className="form-group">
+              <label className="text-light"> Offer Name <span className="text-warning">*</span></label>
                 <input
                   onChange={handleChange("offerName")}
                   name="offerName"
@@ -120,6 +121,7 @@ export default function AddOffer() {
                 />
               </div>
               <div className="form-group">
+              <label className="text-light"> Description <span className="text-warning">*</span></label>
                 <textarea
                   onChange={handleChange("offerDesc")}
                   name="offerDesc"
@@ -129,6 +131,7 @@ export default function AddOffer() {
                 />
               </div>
               <div className="form-group">
+              <label className="text-light"> Offer Start Date <span className="text-warning">*</span></label>
                 <input
                   onChange={handleChange("offerStartDate")}
                   type="date"
@@ -140,6 +143,7 @@ export default function AddOffer() {
               </div>
               
               <div className="form-group">
+              <label className="text-light"> Offer Last Date <span className="text-warning">*</span></label>
                 <input
                   onChange={handleChange("offerEndDate")}
                   type="date"
@@ -151,6 +155,7 @@ export default function AddOffer() {
               </div>
 
               <div className="form-group">
+              <label className="text-light"> Merchant <span className="text-warning">*</span></label>
                 <input
                   onChange={handleChange("merch")}
                   type="text"
